@@ -1,7 +1,10 @@
 #include "User.h"
 
 
-User::User(int userId) : id(userId) {}
+User::User(int userId) {
+  id = userId;
+  watchedMovies = vector<Movie>();
+}
 
 void User::addMovie(Movie movie) {
   watchedMovies.push_back(movie);
@@ -14,4 +17,7 @@ void User::addMovies(const vector <Movie> &movies) {
   }
 int User::getId() {
   return id;
+}
+vector<Movie> User::getWatchedMovies() {
+  return watchedMovies;
 }

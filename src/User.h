@@ -15,6 +15,7 @@ class User {
         void addMovie(Movie movie);
         void addMovies(const vector <Movie>  &movies);
         int getId();
+        vector<Movie> getWatchedMovies();
 
 };
 
