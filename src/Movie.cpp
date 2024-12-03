@@ -20,5 +20,3 @@
 size_t Movie::MovieHash::operator()(const Movie& movie) const {
     return std::hash<int>()(movie.getId());  // Use the built-in hash function for integers
 }
-
-        

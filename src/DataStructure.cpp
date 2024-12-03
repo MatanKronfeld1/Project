@@ -44,3 +44,10 @@ const vector <User> &DataStructure:: get_users(){
     return users;
 }
 
+vector<User> &DataStructure :: getUsersVector () {
+  return users;
+}
+
+void DataStructure :: add_User(User newUser) {
+  users.push_back(newUser);
+  }
