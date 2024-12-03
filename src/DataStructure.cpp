@@ -20,28 +20,27 @@ User DataStructure::find_user(int id) {
     }
 }
 
-bool DataStructure :: find_movie(User user, Movie movie) {
-    vector<Movie> movies = user.getWatchedMovies();
-    for (Movie &film : movies) {
-        if (film.getId() == movie.getId()) {
-            return true;
-        }
-    }
-    return false;
+bool DataStructure :: find_movie(User &user, Movie &movie) {
+    return user.getWatchedMovies().find(movie) != user.getWatchedMovies().end();
 }
 
-void DataStructure::add_User(int id, vector <Movie> &movies) {
+void DataStructure::add_User(int id, const std::unordered_set<Movie, Movie::MovieHash>& movies) {
+    // Check if the user already exists by iterating through the users vector
     for (User &user : users) {
         if (user.getId() == id) {
-            for (Movie &movie : movies) {
-                if (!find_movie(user, movie)) {
-                    user.addMovie(movie);
-                }
-            }
+            // User exists, add the movies
+            user.addMovies(movies);
             return;
         }
     }
+
+    // User does not exist, create a new user and add the movies
     User newUser(id);
     newUser.addMovies(movies);
     users.push_back(newUser);
 }
+
+const vector <User> &DataStructure:: get_users(){
+    return users;
+}
+
