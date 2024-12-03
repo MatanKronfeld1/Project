@@ -5,6 +5,6 @@
     }
 
 
-    int Movie :: getId() {
+    int Movie :: getId() const{
       return id;
     }

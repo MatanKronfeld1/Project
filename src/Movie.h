@@ -4,7 +4,7 @@
 class Movie {
 public:
     Movie(int movie_id);
-    int getId();
+    int getId() const;
 private:
     int id;
 };

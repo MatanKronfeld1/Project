@@ -1,10 +1,14 @@
 # include "DataStructure.h"
 # include <iostream>
-#include <algorithm>
+# include <algorithm>
 
 // Constructor
 DataStructure::DataStructure() {
     users = vector<User>();
+}
+
+vector<User>& DataStructure::getUsersVector(){
+    return users;
 }
 
 User DataStructure::find_user(int id) {
@@ -43,5 +47,9 @@ void DataStructure::add_User(int id, vector <Movie> &movies) {
     }
     User newUser(id);
     newUser.addMovies(movies);
+    users.push_back(newUser);
+}
+
+void DataStructure::add_User(User newUser) {
     users.push_back(newUser);
 }
