@@ -1,23 +1,31 @@
 #include "User.h"
 
+// Constructor: Initializes the user with an ID
+User::User(int userId) : id(userId) {}
 
-User::User(int userId) {
-  id = userId;
-  watchedMovies = vector<Movie>();
-}
-
-void User::addMovie(Movie movie) {
-  watchedMovies.push_back(movie);
+// Add a single movie to the watched set
+void User::addMovie(const Movie& movie) {
+    watchedMovies.insert(movie);
 }
 
-void User::addMovies(const vector <Movie> &movies) {
-  for (const Movie &movie : movies) {
-    watchedMovies.push_back(movie);
-    }
-  }
-int User::getId() {
-  return id;
+// Add multiple movies to the watched set
+void User::addMovies(const unordered_set<Movie, Movie::MovieHash>& movies) {
+    watchedMovies.insert(movies.begin(), movies.end());
 }
-vector<Movie> User::getWatchedMovies() {
-  return watchedMovies;
+
+// Get the user ID
+int User::getId() const {
+    return id;
 }
+
+// Get the unordered set of watched movies
+const unordered_set<Movie, Movie::MovieHash>& User::getWatchedMovies() const {
+    return watchedMovies;
+}
+
+// Check if the user has watched a movie
+bool User::hasWatchedMovie(const Movie& movie) const {
+    return watchedMovies.find(movie) != watchedMovies.end();
+}
+
+
