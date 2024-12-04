@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <iostream>
 
 /*#include "User.h"
 #include "Movie.h"

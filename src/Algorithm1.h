@@ -12,7 +12,7 @@
 class Algorithm1 : public IAlgorithm {
 public:
     // Method to recommend movies based on mutual movies with the target user
-    void recommend(DataStructure& dataStructure, int userId, int movieId) override;
+    vector <int> recommend(DataStructure& dataStructure, int userId, int movieId) override;
 };
 
 #endif
