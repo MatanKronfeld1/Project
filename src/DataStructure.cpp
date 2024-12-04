@@ -20,6 +20,15 @@ User DataStructure::find_user(int id) {
     }
 }
 
+User* DataStructure::find_user_ptr(int id) {
+        for (User &user : users) {
+            if (user.getId() == id) {
+                return &user;
+            }
+        }
+            return nullptr;
+}
+
 bool DataStructure :: find_movie(User &user, Movie &movie) {
     return user.getWatchedMovies().find(movie) != user.getWatchedMovies().end();
 }

@@ -8,7 +8,7 @@
 using namespace std;
 
 // Function to calculate and recommend movies based on mutual movie interests
-void Algorithm1::recommend(DataStructure& dataStructure, int userId, int movieId) {
+    vector <int> Algorithm1::recommend(DataStructure& dataStructure, int userId, int movieId) {
     unordered_map<int, int> movieRecommendationScore; // Maps movie ID to recommendation score
     unordered_map<int, int> mutualMovies; // Maps movie ID to mutual movie count
     vector <pair<int, int>> recommendations; // Vector to store recommendations
@@ -61,8 +61,15 @@ void Algorithm1::recommend(DataStructure& dataStructure, int userId, int movieId
         return movie1.second > movie2.second;
     });
 
-    // Print the first 8 recommendations
-    for (int i = 0; i < 8 && i < recommendations.size(); i++) {
+    // Print the first 10 recommendations
+    for (int i = 0; i < 10 && i < recommendations.size(); i++) {
         cout << "Movie ID: " << recommendations[i].first << " Recommendation Score: " << recommendations[i].second << endl;
     }
+
+    // Return the first 10 recommendations
+    vector <int> finalMovies;
+    for (int i = 0; i < 10 && i < recommendations.size(); i++) {
+        finalMovies.push_back(recommendations[i].first);
+    }
+    return finalMovies;
 }
