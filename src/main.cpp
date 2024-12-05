@@ -4,6 +4,7 @@
 #include "standardInput.h"
 #include "standardOutput.h"
 #include "Add.h"
+#include "Help.h"
 #include <map>
 #include <string>
 
@@ -18,7 +19,7 @@ int main() {
     Icommand* recommend = new Recommend();
     Icommand* add = new Add();
     commands["recommend"] = recommend;
-    //commands["help"] = new Help();
+    commands["help"] = new Help();
     commands["add"] = add;
     App app(commands);
     app.run(so, si);

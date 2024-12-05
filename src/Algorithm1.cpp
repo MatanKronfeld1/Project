@@ -61,11 +61,6 @@ using namespace std;
         return movie1.second > movie2.second;
     });
 
-    // Print the first 10 recommendations
-    for (int i = 0; i < 10 && i < recommendations.size(); i++) {
-        cout << "Movie ID: " << recommendations[i].first << " Recommendation Score: " << recommendations[i].second << endl;
-    }
-
     // Return the first 10 recommendations
     vector <int> finalMovies;
     for (int i = 0; i < 10 && i < recommendations.size(); i++) {
