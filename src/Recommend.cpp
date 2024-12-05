@@ -2,13 +2,14 @@
 #include "Recommend.h"
 #include "iAlgorithm.h"
 #include "Algorithm1.h"
+#include "originalDataManager.h"
 #include <iostream>
 
 using namespace std;
 
 using namespace std;
 
-void Recommend::execute(istringstream& stream, DataStructure* data) {
+void Recommend::execute(istringstream& stream, DataStructure* data, originalDataManager* dataManager) {
     string arg1;
     string arg2;
     stream >> arg1;

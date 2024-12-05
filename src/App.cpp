@@ -2,43 +2,37 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include "Recommend.h"
 #include "App.h"
 #include "standardInput.h"
 #include "standardOutput.h"
 #include "DataStructure.h"
 #include "originalDataManager.h"
 #include "DataFilesManager.h"
+#include "Add.h"
 
 using namespace std;
-
 
 
 
 void App::run(outputManager* outputManager, inputManager* inputManager) {
     originalDataManager* dataManager = new DataFilesManager();
     DataStructure* dataStructure = dataManager->uploadData();
-    vector <User> users = dataStructure->get_users();
-
-    // Step 5: Check if the data was loaded successfully (print some data to verify)
-    if (users.size() == 0) {
-        outputManager->writeOutput("No data loaded");
-    } else {
-        outputManager->writeOutput("Data loaded successfully");
-    }
-
-    /*
-   while (true) {
-        string input = inputManager->readInput();
-        istringstream stream(input);
-        string command;
-        stream >> command;
+    while(true){
         try{
-            transform(command.begin(), command.end(), command.begin(), ::tolower);
-        } catch ( ... ) { goto readInputAgain; }
-        try {
-            commands[command]->execute(stream, data);
-        } catch ( ... ) {}
-    readInputAgain:;
-   }
-   */
+            string input = inputManager->readInput();
+            istringstream stream(input);
+            string command;
+            stream >> command;
+
+            //transform(command.begin(), command.end(), command.begin(), ::tolower);
+            if(input.find('\t') != string::npos) continue; //skip if input contain tabs
+            if(commands.count(command)==0) continue; //skip invalid commands
+            string args;
+            getline(stream, args);
+            istringstream argsStream(args);
+            commands[command] -> execute(argsStream, dataStructure, dataManager);
+        }
+        catch ( ... ) {continue;}
+    }
 }
