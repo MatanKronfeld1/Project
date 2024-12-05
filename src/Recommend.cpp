@@ -27,6 +27,9 @@ void Recommend::execute(istringstream& stream, DataStructure* data, originalData
 
     // making it ready for printing
     string output;
+    if (recs.size() == 0) {
+        return;
+    }
     for (int i = 0; i < recs.size(); i++) {
         output += to_string(recs[i]);
         if (i != recs.size() - 1) {
