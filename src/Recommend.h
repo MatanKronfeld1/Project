@@ -9,7 +9,7 @@ using namespace std;
 class Recommend : public Icommand {
 public:
     // Method to recommend movies based on mutual movies with the target user
-    void execute(istringstream& stream, DataStructure* data) override;
+    void execute(istringstream& stream, DataStructure* data, originalDataManager* dataManager) override;
 };
 
 

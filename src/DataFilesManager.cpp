@@ -53,9 +53,21 @@ DataStructure* DataFilesManager::uploadData(){
 this function append movies to a given user that is already exist in the file
 */
 void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesToAdd){
-    //open the file in read and write mode
-    std::fstream inputFile("../data/dataFile.txt", std::ios::in | std::ios::out);
+    //open the file in read mode to count lines
+    std::fstream inputFile("../data/dataFile.txt", std::ios::in);
     if(!inputFile){
+       //error in opening file
+        return; 
+    }
+    std::string curLine;
+    int linesNum=0;
+    while(std::getline(inputFile, curLine)){
+        linesNum++;
+    }
+    inputFile.close();
+    //open the file in read and write mode
+    std::fstream file("../data/dataFile.txt", std::ios::in | std::ios::out);
+    if(!file){
         //error in opening file
         return;
     }
@@ -63,9 +75,10 @@ void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesT
     //std::string modifiedData;
     std::stringstream modifiedData;
     bool isUserFound = false;
+    int currentLineIndex = 0;
 
     //read the entire file
-    while (std::getline(inputFile, currentLine)){
+    while (std::getline(file, currentLine)){
         std::stringstream strStream(currentLine);
         int currentUserId;
         strStream >> currentUserId;
@@ -82,7 +95,12 @@ void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesT
             }
         }
         //add the line (modified or original) to the modified content stream
-        modifiedData << currentLine << std::endl;
+        modifiedData << currentLine;
+        //if we are not in the last line
+        if(currentLineIndex < linesNum-1){
+            modifiedData << std::endl;
+        }
+        currentLineIndex++;
     } //end of while loop
 
     //close the file in order to write changes back
@@ -99,22 +117,26 @@ void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesT
 }
 
 void DataFilesManager::addRecordToData(User user, const vector <Movie>  &moviesToAdd){
-    //open the file in reading mode in order to add the data to the end of the file
-    /*std::ifstream inputFile("../data/dataFile.txt", std::ios::in);
+    //open the file in reading mode to check the first line
+    std::ifstream inputFile("../data/dataFile.txt", std::ios::in);
     if(!inputFile){
         //error in opening file
         return;
     }
-    bool isEmptyFile = inputFile.peek() == std::ifstream::traits_type::eof();
-    inputFile.close();*/
+    std::string firstLine;
+    std::getline(inputFile, firstLine);
+    inputFile.close();
     //open the file in append mode in order to add the data to the end of the file
     std::ofstream outputFile("../data/dataFile.txt", std::ios::out | std::ios::app);
     if(!outputFile){
        //error in opening file
         return; 
     }
-    //start a new line for the new record
-    outputFile << std::endl;
+    //if the first line is not empty, we need to add a new line before appending
+    if(!firstLine.empty()){
+        //start a new line for the new record
+        outputFile << std::endl;
+    }
     //write the user Id at the begginig of a new line at the end of the file
     outputFile << user.getId();
     //append every movie Id if every movie in the movies vector to the line
