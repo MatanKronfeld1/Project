@@ -10,18 +10,21 @@
 #include "DataStructure.h"*/
 
 DataStructure* DataFilesManager::uploadData(){
+    //declare 2 strings that represent path. neede in order to use the dockerfile
+    //std::string path = "../data/dataFile.txt";
+    std::string path = "/app/data/dataFile.txt";
     //try to open the file that contains the data of the project in read and write mode
-    std::fstream inputFile("../data/dataFile.txt", std::ios::in | std::ios::out);
+    std::fstream inputFile(path, std::ios::in | std::ios::out);
     //if the file doesn't exist - create it
     if(!inputFile){
-        inputFile.open("../data/dataFile.txt", std::ios::out);
+        inputFile.open(path, std::ios::out);
         if(!inputFile){
             //error with creating file
             return nullptr;
         }
         //close and reopen the file for reading
         inputFile.close();
-        inputFile.open("../data/dataFile.txt");
+        inputFile.open(path);
     }
 
     DataStructure* dataStructure = new DataStructure();
@@ -53,8 +56,10 @@ DataStructure* DataFilesManager::uploadData(){
 this function append movies to a given user that is already exist in the file
 */
 void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesToAdd){
+    //std::string path = "../data/dataFile.txt";
+    std::string path = "/app/data/dataFile.txt";
     //open the file in read mode to count lines
-    std::fstream inputFile("../data/dataFile.txt", std::ios::in);
+    std::fstream inputFile(path, std::ios::in);
     if(!inputFile){
        //error in opening file
         return; 
@@ -66,7 +71,7 @@ void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesT
     }
     inputFile.close();
     //open the file in read and write mode
-    std::fstream file("../data/dataFile.txt", std::ios::in | std::ios::out);
+    std::fstream file(path, std::ios::in | std::ios::out);
     if(!file){
         //error in opening file
         return;
@@ -106,7 +111,7 @@ void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesT
     //close the file in order to write changes back
     inputFile.close();
     //open the file again in write mode (to rewrite it)
-    std::ofstream outputFile("../data/dataFile.txt", std::ios::out | std::ios::trunc);
+    std::ofstream outputFile(path, std::ios::out | std::ios::trunc);
     if(!outputFile){
         //error in opening file
         return;
@@ -117,8 +122,10 @@ void DataFilesManager::addMoviesToUser(User user, const vector <Movie>  &moviesT
 }
 
 void DataFilesManager::addRecordToData(User user, const vector <Movie>  &moviesToAdd){
+    //std::string path = "../data/dataFile.txt";
+    std::string path = "/app/data/dataFile.txt";
     //open the file in reading mode to check the first line
-    std::ifstream inputFile("../data/dataFile.txt", std::ios::in);
+    std::ifstream inputFile(path, std::ios::in);
     if(!inputFile){
         //error in opening file
         return;
@@ -127,7 +134,7 @@ void DataFilesManager::addRecordToData(User user, const vector <Movie>  &moviesT
     std::getline(inputFile, firstLine);
     inputFile.close();
     //open the file in append mode in order to add the data to the end of the file
-    std::ofstream outputFile("../data/dataFile.txt", std::ios::out | std::ios::app);
+    std::ofstream outputFile(path, std::ios::out | std::ios::app);
     if(!outputFile){
        //error in opening file
         return; 
