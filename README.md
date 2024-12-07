@@ -3,7 +3,7 @@
 ```bash
 docker build -t part1 .
 docker volume create data1
-docker run --init it -v data1:/app/data part1
+docker run --init -it -v data1:/app/data part1
 ```
 NOTE: 
 	In order to stop the program from running use: ctrl + C
