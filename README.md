@@ -50,7 +50,7 @@ Our project contains several classes and interfaces as detailed below:
 - standardOutput (implements "outputManager" interface):
 	 Handles writing output to the console.
 
--DataStructure:
+- DataStructure:
 	Instances of this class represent the data structure that contains the data. 
 	This class contains functions that enable to add a new user, find a user in the data, find a movie and more.
 
