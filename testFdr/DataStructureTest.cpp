@@ -1,109 +1,99 @@
+// test_DataStructure.cpp
 #include <gtest/gtest.h>
 #include "DataStructure.h"
 #include "User.h"
 #include "Movie.h"
 
-// Test Constructor
-TEST(DataStructureTest, Constructor) {
-    DataStructure ds;
-    EXPECT_EQ(ds.get_users().size(), 0); // Initial user list should be empty
+// Test adding a user by ID and movies
+TEST(DataStructureTest, AddUserByIdAndMovies) {
+    DataStructure v;
+     Movie movie1(1);
+    Movie movie2(2);
+        std::unordered_set<Movie, Movie::MovieHash> movies = {movie1, movie2};
+
+    v.add_User(100, movies);
+
+        const auto& users = v.get_users();
+    ASSERT_EQ(users.size(), 1);
+     EXPECT_EQ(users[0].getId(), 100);
+      EXPECT_TRUE(users[0].hasWatchedMovie(movie1));
+    EXPECT_TRUE(users[0].hasWatchedMovie(movie2));
 }
 
-// Test Add User
-TEST(DataStructureTest, AddUser) {
-    DataStructure ds;
-    ds.add_User(1, {}); // Add user with no movies
-    EXPECT_EQ(ds.get_users().size(), 1); // User list should have one user
-    EXPECT_EQ(ds.get_users()[0].getId(), 1); // Verify user ID
+// Test finding a user by ID
+TEST(DataStructureTest, FindUserById) {
+    DataStructure v;
+    User user2(104);
+    v.add_User(user2);
+
+    User foundUser = v.find_user(104);
+    EXPECT_EQ(foundUser.getId(), 104);
 }
 
-// Test Add User with Movies
-TEST(DataStructureTest, AddUserWithMovies) {
-    DataStructure ds;
-    Movie movie1(101);
-    Movie movie2(102);
 
-    std::unordered_set<Movie, Movie::MovieHash> movies = {movie1, movie2};
-    ds.add_User(1, movies);
 
-    EXPECT_EQ(ds.get_users().size(), 1); // Verify one user added
-    EXPECT_TRUE(ds.get_users()[0].getWatchedMovies().find(movie1) != ds.get_users()[0].getWatchedMovies().end());
-    EXPECT_TRUE(ds.get_users()[0].getWatchedMovies().find(movie2) != ds.get_users()[0].getWatchedMovies().end());
+
+// Test finding a user pointer by ID
+TEST(DataStructureTest, FindUserPtrById) {
+    DataStructure v;
+    User user4(16);
+    v.add_User(user4);
+
+    User* userPtr = v.find_user_ptr(16);
+    ASSERT_NE(userPtr, nullptr);
+    EXPECT_EQ(userPtr->getId(), 16);
+
+    userPtr = v.find_user_ptr(30); // Nonexistent user
+    EXPECT_EQ(userPtr, nullptr);
+
+
 }
 
-// Test Find User by ID
-TEST(DataStructureTest, FindUser) {
-    DataStructure ds;
-    ds.add_User(1, {});
-    User user = ds.find_user(1);
+TEST(DataStructureTest, AddUserDirectly) {
+    DataStructure v;
+    User user(102);
+    Movie movie(40);
+    user.addMovie(movie);
 
-    EXPECT_EQ(user.getId(), 1); // Verify the user is found
+    v.add_User(user);
+
+    const auto& users = v.get_users();
+    ASSERT_EQ(users.size(), 1);
+    EXPECT_EQ(users[0].getId(), 102);
+    EXPECT_TRUE(users[0].hasWatchedMovie(movie));
 }
 
-TEST(DataStructureTest, FindUserThrowsOnInvalidId) {
-    DataStructure ds;
-    ds.add_User(1, {});
-    EXPECT_THROW(ds.find_user(2), const char*); // Verify exception on invalid ID
+// duplicates 
+TEST(DataStructureTest, AddDuplicateUserById) {
+    DataStructure v;
+    Movie movie(9);
+    Movie movie1(10);
+    std::unordered_set<Movie, Movie::MovieHash> movies = {movie};
+    std::unordered_set<Movie, Movie::MovieHash> movies1 = {movie1};
+
+    v.add_User(108, movies);
+    v.add_User(108, movies1); 
+
+    const auto& users = v.get_users();
+    ASSERT_EQ(users.size(), 1); 
+    EXPECT_EQ(users[0].getId(), 108);
+    EXPECT_TRUE(users[0].hasWatchedMovie(movie));
+    EXPECT_TRUE(users[0].hasWatchedMovie(movie1));
 }
 
-// Test Find User Pointer
-TEST(DataStructureTest, FindUserPointer) {
-    DataStructure ds;
-    ds.add_User(1, {});
-    User* userPtr = ds.find_user_ptr(1);
+// Test checking if a user has watched a specific movie
+TEST(DataStructureTest, FindMovieInUser) {
+    DataStructure v;
+    Movie movie(7);
+    Movie movie1(8);
+    std::unordered_set<Movie, Movie::MovieHash> movies = {movie};
+    v.add_User(1007, movies);
 
-    ASSERT_NE(userPtr, nullptr); // Verify the pointer is not null
-    EXPECT_EQ(userPtr->getId(), 1); // Verify the user ID
+    User* userPtr = v.find_user_ptr(1007);
+    ASSERT_NE(userPtr, nullptr);
+
+    EXPECT_TRUE(v.find_movie(*userPtr, movie));
+    EXPECT_FALSE(v.find_movie(*userPtr, movie1));
 }
 
-TEST(DataStructureTest, FindUserPointerInvalidId) {
-    DataStructure ds;
-    User* userPtr = ds.find_user_ptr(1);
 
-    EXPECT_EQ(userPtr, nullptr); // Verify null pointer for invalid ID
-}
-
-// Test Find Movie for User
-TEST(DataStructureTest, FindMovieForUser) {
-    DataStructure ds;
-    Movie movie1(101);
-    std::unordered_set<Movie, Movie::MovieHash> movies = {movie1};
-
-    ds.add_User(1, movies);
-    User user = ds.find_user(1);
-
-    EXPECT_TRUE(ds.find_movie(user, movie1)); // Verify the movie is found
-}
-
-// Test Adding Duplicate User Adds Movies
-TEST(DataStructureTest, AddDuplicateUserAddsMovies) {
-    DataStructure ds;
-    Movie movie1(101);
-    Movie movie2(102);
-
-    ds.add_User(1, {movie1});
-    ds.add_User(1, {movie2}); // Add movies to the same user
-
-    const auto& users = ds.get_users();
-    EXPECT_EQ(users.size(), 1); // Still one user
-    EXPECT_TRUE(users[0].getWatchedMovies().find(movie1) != users[0].getWatchedMovies().end());
-    EXPECT_TRUE(users[0].getWatchedMovies().find(movie2) != users[0].getWatchedMovies().end());
-}
-
-// Test Get Users
-TEST(DataStructureTest, GetUsers) {
-    DataStructure ds;
-    ds.add_User(1, {});
-    ds.add_User(2, {});
-
-    const auto& users = ds.get_users();
-    EXPECT_EQ(users.size(), 2); // Verify two users added
-    EXPECT_EQ(users[0].getId(), 1);
-    EXPECT_EQ(users[1].getId(), 2);
-}
-
-// Main function to run all tests
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}

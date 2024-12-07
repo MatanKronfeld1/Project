@@ -14,6 +14,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(runTests Movie.cpp MovieTest.cpp User.cpp test_user.cpp)
+add_executable(runTests Movie.cpp MovieTest.cpp User.cpp test_user.cpp DataStructure.cpp DataStructureTest.cpp)
 
 target_link_libraries(runTests gtest_main)
